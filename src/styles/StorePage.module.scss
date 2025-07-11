@@ -1,0 +1,142 @@
+.wrapper {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color, #000);
+  background: var(--bg-color, #fff);
+  transition: background 0.3s ease;
+  overflow-x: hidden;
+}
+
+.media {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  height: 30%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  img {
+    width: 50%;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  z-index: 2;
+
+  .shopInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    pointer-events: auto;
+
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 1rem;
+      color: inherit;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .more {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: inherit;
+    pointer-events: auto;
+  }
+}
+
+.shopDetails {
+  position: relative;
+  margin-top: -11rem;
+  padding: 1rem 1.2rem 2rem;
+  height: 8rem;
+  background: linear-gradient(to bottom, transparent, var(--bg-color, #fff));
+  //backdrop-filter: blur(10px);
+  z-index: 5;
+
+  .shopMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8rem;
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0;
+      color: inherit;
+    }
+
+    p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.8rem;
+
+      button {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+
+      .icon-bell::before {
+        content: '🔔'; // Zameniti sa pravom ikonicom ako koristiš paket
+      }
+
+      .icon-search::before {
+        content: '🔍';
+      }
+    }
+  }
+}
+
+
+.specialOffer {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: rgba(80, 37, 231, 0.9);
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  padding: 0.5rem;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+
+  &.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
