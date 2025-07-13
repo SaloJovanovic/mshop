@@ -1,0 +1,187 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding-top: 59;
+  padding-bottom: 15rem;
+}
+
+.header {
+  position: fixed;
+  z-index: 2;
+  width: calc(100% - 32px);
+  top: 0;
+  background: white;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  border-radius: 999px;
+}
+
+.shopName {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.rating {
+  font-size: 12px;
+  color: #777;
+}
+
+.carousel {
+  .slick-dots li button:before {
+    font-size: 8px;
+    color: #aaa;
+  }
+  .slick-dots li.slick-active button:before {
+    color: #000;
+  }
+
+  .slide {
+    img {
+      object-fit: contain;
+      width: 100%;
+    }
+  }
+}
+
+.content {
+  padding: 16px;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 12px 0;
+}
+
+.colors {
+  margin-top: 12px;
+}
+
+.label {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.colorOptions {
+  display: flex;
+  gap: 8px;
+}
+
+.color {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ededed;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.selected {
+  border: 2px solid white;
+  outline: 2px solid black;
+}
+
+.quantity {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.counter {
+  padding: .3rem;
+  width: 75px;
+  border-radius: 1rem;
+  background: #f8f8f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  button {
+    width: 24px;
+    height: 24px;
+    font-size: 1.3rem;
+    border: none;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.counts {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.countsMap {
+  display: flex;
+  gap: 8px;
+}
+
+.countOption {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 999px;
+  background: #f8f8f8;
+  transition: all .3s ease;
+}
+
+.active {
+  border: 2px solid #555555;
+}
+
+.buttons {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.addToCart {
+  font-size: 1rem;
+  flex: 1;
+  background: #5025e7;
+  color: white;
+  padding: 12px;
+  border-radius: 1rem;
+  border: none;
+}
+
+.buyNow {
+  font-size: 1rem;
+  flex: 1;
+  background: #000;
+  color: white;
+  padding: 12px;
+  border-radius: 1rem;
+  border: none;
+}

@@ -22,6 +22,7 @@
 .modal {
   transform: translateY(100%);
   background: #fff;
+  color: black;
   width: 100%;
   max-width: 500px;
   margin: 20px;
@@ -61,11 +62,11 @@
 
     .rating {
       font-size: 0.9rem;
-      color: #666;
+      color: #666 !important;
     }
 
     .closeBtn {
-      color: black;
+      color: black !important;
       margin-left: auto;
       background: none;
       border: none;

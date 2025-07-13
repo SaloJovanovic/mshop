@@ -67,31 +67,109 @@
       { "id": "4", "image": "/images/products/airforce.jpg", "name": "NIKE Air Force 1", "price": "$115.00" }
     ],
     "recentlyViewed": [
-      { "id": "11", "image": "/images/products/jordan1.jpg", "name": "Air Jordan 1", "price": "$120.00" }
+      { "id": "11", "image": "/images/products/dunk.jpg", "name": "Air Jordan 1", "price": "$120.00" }
     ],
     "categories": [
       {
         "title": "Men's Footwear",
         "products": [
-          { "id": "101", "image": "/images/products/pegasus.jpg", "name": "Nike Pegasus 40", "price": "$130.00" },
-          { "id": "102", "image": "/images/products/vapormax.jpg", "name": "Nike Vapormax", "price": "$190.00" }
+          { "id": "101", "image": "/images/products/airmax90.jpg", "name": "Nike Pegasus 40", "price": "$130.00" },
+          { "id": "102", "image": "/images/products/airforce.jpg", "name": "Nike Vapormax", "price": "$190.00" }
         ]
       },
       {
         "title": "Women's Footwear",
         "products": [
-          { "id": "103", "image": "/images/products/invincible.jpg", "name": "Nike Invincible Run", "price": "$180.00" },
-          { "id": "104", "image": "/images/products/structure.jpg", "name": "Nike Structure", "price": "$140.00" }
+          { "id": "103", "image": "/images/products/airmax1.jpg", "name": "Nike Invincible Run", "price": "$180.00" },
+          { "id": "104", "image": "/images/products/dunk.jpg", "name": "Nike Structure", "price": "$140.00" }
         ]
       },
       {
         "title": "Accessories",
         "products": [
-          { "id": "105", "image": "/images/products/hat.jpg", "name": "Nike Hat", "price": "$30.00" },
-          { "id": "106", "image": "/images/products/bag.jpg", "name": "Nike Gym Bag", "price": "$55.00" }
+          { "id": "105", "image": "/images/products/airforce.jpg", "name": "Nike Hat", "price": "$30.00" },
+          { "id": "106", "image": "/images/products/airmax90.jpg", "name": "Nike Gym Bag", "price": "$55.00" }
         ]
       }
+    ],
+    "collections": [
+      {
+        "title": "New Arrivals",
+        "image": "/images/collections/collection1.jpg"
+      },
+      {
+        "title": "Best Sellers",
+        "image": "/images/collections/collection2.jpg"
+      },
+      {
+        "title": "New Arrivals",
+        "image": "/images/collections/collection1.jpg"
+      }
+    ],
+    "videos": [
+      {
+        "id": "1",
+        "src": "/videos/products/nike1.mp4",
+        "shopName": "Nike",
+        "shopLogo": "/images/logos/logo5.png",
+        "isFollowing": true,
+        "product": {
+          "id": "1",
+          "image": "/images/products/dunk.jpg",
+          "name": "NIKE Dunk Low",
+          "price": "$99.00",
+          "rating": 4.7,
+          "reviews": 4287
+        }
+      },
+      {
+        "id": "2",
+        "src": "/videos/products/nike2.mp4",
+        "shopName": "Nike",
+        "shopLogo": "/images/logos/logo5.png",
+        "isFollowing": true,
+        "product": {
+          "id": "1",
+          "image": "/images/products/dunk.jpg",
+          "name": "NIKE Dunk Low",
+          "price": "$99.00",
+          "rating": 4.7,
+          "reviews": 4287
+        }
+      },
+      {
+        "id": "3",
+        "src": "/videos/products/nike3.mp4",
+        "shopName": "Nike",
+        "shopLogo": "/images/logos/logo5.png",
+        "isFollowing": true,
+        "product": {
+          "id": "1",
+          "image": "/images/products/dunk.jpg",
+          "name": "NIKE Dunk Low",
+          "price": "$99.00",
+          "rating": 4.7,
+          "reviews": 4287
+        }
+      }
     ]
+  },
+  {
+    "id": 6,
+    "name": "Fashion Nova",
+    "backgroundVideo": "https://cdn.shopify.com/videos/c/vp/c30586210a024fbe904627708544ddd7/c30586210a024fbe904627708544ddd7.SD-480p-1.5Mbps-38966853.mp4",
+    "logo": "https://cdn.shopify.com/shop-assets/shopify_brokers/fnova.myshopify.com/1732588622/FNLogos_dark.png?format=webp&width=640",
+    "rating": 4.3,
+    "reviews": 1250,
+    "specialOffer": "Save 15%"
+  },
+  {
+    "id": 7,
+    "name": "DFYNE",
+    "backgroundImage": "https://cdn.shopify.com/shop-assets/shopify_brokers/pythonperformanceus.myshopify.com/1700499058/L1A8451EditEdit2Edit.jpeg?width=750?width=1152&width=800",
+    "logo": "https://cdn.shopify.com/shop-assets/shopify_brokers/pythonperformanceus.myshopify.com/1700499039/DFYNEWhite1000pxwidePNG.png?format=webp&width=640",
+    "rating": 4.3,
+    "reviews": 1250,
+    "specialOffer": "Save 15%"
   }
-
 ]

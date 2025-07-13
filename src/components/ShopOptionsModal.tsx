@@ -46,6 +46,27 @@ export default function ShopOptionsModal({ open, onClose, shop }: Props) {
       setAnimateIn(false); // pokreće zatvaranje
     }
   };
+  
+    // Extract dominant color from logo image and calculate contrast color
+  const [logoBgColor, setLogoBgColor] = useState<string>('white');
+  useEffect(() => {
+    if (!shop.logo) return;
+    const img = document.createElement('img');
+    img.crossOrigin = 'anonymous';
+    img.src = shop.logo;
+    img.onload = () => {
+      try {
+        // @ts-ignore
+        const colorThief = new (window.ColorThief || require('color-thief-browser'))();
+        const color = colorThief.getColor(img);
+        // Kontrastna boja
+        const yiq = (color[0] * 299 + color[1] * 587 + color[2] * 114) / 1000;
+        setLogoBgColor(yiq >= 178 ? '#000' : '#fff');
+      } catch {
+        setLogoBgColor('white');
+      }
+    };
+  }, [shop.logo]);
 
   if (!shouldRender) return null;
 
@@ -61,7 +82,7 @@ export default function ShopOptionsModal({ open, onClose, shop }: Props) {
       >
         <div className={styles.header}>
           <div className={styles.logo}>
-            <img src={shop.logo} alt="logo" />
+            <img src={shop.logo} alt="logo" style={{backgroundColor: `${logoBgColor}`}} />
           </div>
           <div>
             <div className={styles.name}>{shop.name}</div>

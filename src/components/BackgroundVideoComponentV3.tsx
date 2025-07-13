@@ -1,3 +1,4 @@
+// components/BackgroundVideoComponentV3.tsx
 'use client';
 
 import styles from '../styles/BackgroundVideoComponent.module.scss';
@@ -6,7 +7,7 @@ import {FiHeart, FiMoreHorizontal} from 'react-icons/fi';
 import ShopOptionsModal from './ShopOptionsModal';
 import React, { useState } from 'react';
 import {FaArrowRight} from "react-icons/fa6";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 interface Product {
   id: number;
@@ -26,12 +27,15 @@ interface Props {
     backgroundVideo: string;
     callToActionText: string;
     products: Product[];
+    id: number;
   };
 }
 
 export default function BackgroundVideoComponentV3({ shop }: Props) {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   return (
     <div className={styles.wrapper}>
@@ -49,7 +53,6 @@ export default function BackgroundVideoComponentV3({ shop }: Props) {
         </div>
 
         <div className={styles.bottom}>
-
           <div className={styles1.grid}>
             {shop.products.slice(0, 4).map(product => (
               <div key={product.id} onClick={() => {
@@ -57,7 +60,7 @@ export default function BackgroundVideoComponentV3({ shop }: Props) {
                 alert("alo")
               }} className={styles1.item}>
                 <img src={product.image} alt="item" className={styles1.itemImage}/>
-                <div className={styles1.price}>{product.price}</div>
+                <div className={styles.price}>{product.price}</div>
                 <div className={styles1.heart}>
                   <FiHeart/>
                 </div>
@@ -67,7 +70,7 @@ export default function BackgroundVideoComponentV3({ shop }: Props) {
 
           <div className={styles.callToAction}>
             {shop.callToActionText}
-            <button onClick={() => {router.push(`/store/5`);}} className={styles.arrow}><FaArrowRight/></button>
+            <button onClick={() => router.push(`/store/${shop.id}`)} className={styles.arrow}><FaArrowRight/></button>
           </div>
 
           {shop.specialOffer && (

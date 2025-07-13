@@ -1,0 +1,151 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 9999;
+}
+
+.scrollContainer {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.videoWrapper {
+  height: 100vh;
+  scroll-snap-align: start;
+  position: relative;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.topLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: auto;
+
+  .shopName {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .followBtn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+}
+
+.topRight {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+
+  .shopLogo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+    object-fit: contain;
+    background: white;
+  }
+
+  .soundBtn {
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+  }
+}
+
+.productBox {
+  position: absolute;
+  bottom: 4.5rem;
+  left: 1.2rem;
+  right: 1.2rem;
+  background: white;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  pointer-events: auto;
+
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+
+  .productInfo {
+    flex-grow: 1;
+    font-size: 0.9rem;
+
+    .productName {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .productMeta {
+      font-size: 0.75rem;
+      color: #333;
+    }
+  }
+
+  .favBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
+
+.bottomBar {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  pointer-events: auto;
+
+  button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}

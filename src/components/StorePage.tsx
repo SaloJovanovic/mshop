@@ -4,7 +4,10 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import ShopOptionsModal from '@/components/ShopOptionsModal';
 import ColorThief from 'color-thief-browser';
+import CollectionsListing from '@/components/CollectionsListing';
 import { FiBell, FiSearch } from "react-icons/fi";
+import { motion, AnimatePresence } from 'framer-motion';
+import VideoCarousel from './VideoCarousel';
 
 interface Product {
   image: string;
@@ -12,33 +15,110 @@ interface Product {
   price: string;
 }
 
-interface Props {
-  shop: {
-    name: string;
-    logo: string;
-    rating: number;
-    reviews: number;
-    backgroundImage?: string;
-    backgroundVideo?: string;
-    specialOffer?: string;
-    products: Product[];
-  };
+interface Video {
+  id: string;
+  src: string;
+  thumbnail?: string;
 }
+
+interface Category {
+  title: string;
+  image: string;
+  products: Product[];
+}
+
+interface Collection {
+  image: string;
+  title: string;
+}
+
+
+interface ExtendedShop {
+  name: string;
+  logo: string;
+  rating: number;
+  reviews: number;
+  backgroundImage?: string;
+  backgroundVideo?: string;
+  specialOffer?: string;
+  promoTextContinuation?: string;
+  products?: Product[];
+  recentlyViewed?: Product[];
+  categories?: Category[];
+  collections?: Collection[];
+  videos?: Video[];
+  backgroundColor?: string;
+}
+
+interface Props {
+  shop: ExtendedShop;
+}
+
+const ProductListing = ({ products, title, textColor }: { products: Product[]; title: string; textColor: string }) => {
+  return (
+    <div className={styles.productSection}>
+      <h3 className={styles.sectionTitle} style={{
+        color: textColor,
+        '--text-color': textColor,
+      } as React.CSSProperties}>{title}</h3>
+      <div className={styles.productGrid} style={{
+        color: textColor,
+        '--text-color': textColor,
+      } as React.CSSProperties}>
+        {products.map((product, index) => (
+          <div key={`${title}-${index}`} className={styles.productCard}>
+            <img src={product.image} alt={product.name} className={styles.productImage} />
+            <div className={styles.productInfo}>
+              <p className={styles.productName}>{product.name}</p>
+              <p className={styles.productPrice}>{product.price}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const RecentlyViewedListing = ({ products, title, textColor }: { products: Product[]; title: string; textColor: string }) => {
+  return (
+    <div className={styles.productSection + " " + styles.recentlyViewedSection}>
+      <h3 className={styles.sectionTitle} style={{
+        color: textColor,
+        '--text-color': textColor,
+      } as React.CSSProperties}>{title}</h3>
+      <div className={styles.productGrid} style={{
+        color: textColor,
+        '--text-color': textColor,
+      } as React.CSSProperties}>
+        {products.map((product, index) => (
+          <div key={`${title}-${index}`} className={styles.productCard}>
+            <img src={product.image} alt={product.name} className={styles.productImage} />
+            <div className={styles.productInfo}>
+              <p className={styles.productName}>{product.name}</p>
+              <p className={styles.productPrice}>{product.price}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default function StorePage({ shop }: Props) {
   const mediaRef = useRef<HTMLImageElement | HTMLVideoElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [bgColor, setBgColor] = useState<string>('white');
   const [textColor, setTextColor] = useState<string>('black');
   const [showModal, setShowModal] = useState(false);
   const [showSpecial, setShowSpecial] = useState(false);
+  const [scroll, setScroll] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
-  // Funkcija za određivanje kontrastne boje
   const getContrastColor = useCallback((r: number, g: number, b: number) => {
     const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-    return yiq >= 128 ? '#000' : '#fff';
+    return yiq >= 178 ? '#000' : '#fff';
   }, []);
 
-  // Funkcija za ekstrakciju dominantne boje iz ImageData
   const extractDominantColorFromImageData = useCallback((imageData: ImageData) => {
     const colorThief = new ColorThief();
     const tempCanvas = document.createElement('canvas');
@@ -58,13 +138,11 @@ export default function StorePage({ shop }: Props) {
     let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D | null;
 
-    // Funkcija za obradu boje (zajednička za sliku i video)
     const processColor = (r: number, g: number, b: number) => {
       setBgColor(`rgb(${r}, ${g}, ${b})`);
       setTextColor(getContrastColor(r, g, b));
     };
 
-    // --- LOGIKA ZA SLIKE ---
     const handleImageColor = () => {
       if (mediaElement instanceof HTMLImageElement && mediaElement.complete) {
         try {
@@ -79,7 +157,6 @@ export default function StorePage({ shop }: Props) {
       }
     };
 
-    // --- LOGIKA ZA VIDEO (jednokratna) ---
     const handleVideoLoadedData = () => {
       if (mediaElement instanceof HTMLVideoElement) {
         if (!canvas) {
@@ -88,12 +165,10 @@ export default function StorePage({ shop }: Props) {
         }
 
         if (ctx && mediaElement.videoWidth && mediaElement.videoHeight) {
-          // Smanjujemo rezoluciju canvasa radi performansi
-          const scaleFactor = 100 / mediaElement.videoWidth; // Smanjujemo širinu na 100px
+          const scaleFactor = 100 / mediaElement.videoWidth;
           canvas.width = 100;
           canvas.height = mediaElement.videoHeight * scaleFactor;
 
-          // Crta prvi frejm na canvas
           ctx.drawImage(mediaElement, 0, 0, canvas.width, canvas.height);
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           const color = extractDominantColorFromImageData(imageData);
@@ -104,9 +179,7 @@ export default function StorePage({ shop }: Props) {
 
     if (mediaElement) {
       if (shop.backgroundVideo) {
-        // Dodajemo event listener za 'loadeddata'
         mediaElement.addEventListener('loadeddata', handleVideoLoadedData);
-        // Ako je video već učitan (npr. iz keša), odmah pozovi funkciju
         if ("readyState" in mediaElement && mediaElement.readyState >= 2) {
           handleVideoLoadedData();
         }
@@ -121,7 +194,6 @@ export default function StorePage({ shop }: Props) {
       }
     }
 
-    // Cleanup funkcija
     return () => {
       if (mediaElement) {
         if (shop.backgroundVideo) {
@@ -136,16 +208,66 @@ export default function StorePage({ shop }: Props) {
   }, [shop.backgroundVideo, shop.backgroundImage, getContrastColor, extractDominantColorFromImageData]);
 
   useEffect(() => {
-    const onScroll = () => {
-      setShowSpecial(window.scrollY > 30);
+    setTimeout(() => {
+      setShowSpecial(true);
+    }, 1300);
+    
+    const color = getComputedStyle(document.documentElement).getPropertyValue('--theme-color').trim();
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'theme-color');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', color);
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setScrollPosition(scrollY);
+      
+      const mediaHeight = wrapperRef.current?.querySelector(`.${styles.media}`)?.clientHeight || 0;
+      const shopDetailsHeight = wrapperRef.current?.querySelector(`.${styles.shopDetails}`)?.clientHeight || 0;
+      const threshold = mediaHeight + shopDetailsHeight - 100;
+    
+      setScroll(scrollY > threshold);
+      
+      if (scrollY > threshold) {
+        setTextColor('black');
+      } else {
+        const rgb = bgColor.match(/\d+/g)?.map(Number) || [0, 0, 0];
+        setTextColor(getContrastColor(rgb[0], rgb[1], rgb[2]));
+      }
     };
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [bgColor, getContrastColor]);
+
+  const logoSize = Math.max(30, 50 - scrollPosition * 0.2);
+
+  // Extract dominant color from logo image and calculate contrast color
+  const [logoBgColor, setLogoBgColor] = useState<string>('white');
+  useEffect(() => {
+    if (!shop.logo) return;
+    const img = document.createElement('img');
+    img.crossOrigin = 'anonymous';
+    img.src = shop.logo;
+    img.onload = () => {
+      try {
+        const colorThief = new ColorThief();
+        const color = colorThief.getColor(img);
+        const contrast = getContrastColor(color[0], color[1], color[2]);
+        setLogoBgColor(contrast);
+      } catch {
+        setLogoBgColor('white');
+      }
+    };
+  }, [shop.logo, getContrastColor]);
 
   return (
     <div
-      className={styles.wrapper}
+      ref={wrapperRef}
+      className={`${styles.wrapper} ${showSpecial ? styles.specialOfferVisible : ''} ${scroll ? styles.scrolled : ''}`}
       style={{
         background: bgColor,
         color: textColor,
@@ -153,6 +275,39 @@ export default function StorePage({ shop }: Props) {
         '--text-color': textColor,
       } as React.CSSProperties}
     >
+      <AnimatePresence>
+        {scroll && (
+          <motion.div 
+            className={styles.stickyHeader}
+            initial={{ opacity: 1, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 1, y: -100 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className={styles.logoDiv}>
+              <img 
+                src={shop.logo} 
+                alt="logo" 
+                className={styles.stickyLogo}
+                style={{ width: `${logoSize}px`, backgroundColor: logoBgColor }}
+              />
+              {shop.name}
+            </div>
+            <div className={styles.stickyActions}>
+              <button><FiBell/></button>
+              <button><FiSearch/></button>
+              <button onClick={() => setShowModal(true)}><FiMoreHorizontal/></button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {shop.specialOffer && (
+        <div className={`${styles.specialOffer} ${showSpecial ? styles.visible : ''}`}>
+          <span>{shop.specialOffer}</span> {shop.promoTextContinuation}
+        </div>
+      )}
+
       {shop.backgroundVideo ? (
         <video
           ref={mediaRef as React.RefObject<HTMLVideoElement>}
@@ -173,12 +328,19 @@ export default function StorePage({ shop }: Props) {
         />
       )}
 
-      <div className={`${styles.specialOffer} ${showSpecial ? styles.visible : ''}`}>
-        {shop.specialOffer}
-      </div>
-
       <div className={styles.overlay}>
-          <img src={shop.logo} alt="logo"/>
+        <motion.img 
+          src={shop.logo} 
+          alt="logo"
+          style={{ 
+            width: `${Math.max(20, 50 - scrollPosition * 0.1)}%`,
+            transition: 'width 0.3s ease'
+          }}
+          animate={{
+            opacity: scroll ? 0 : 1,
+            scale: scroll ? 0.8 : 1
+          }}
+        />
       </div>
 
       <div className={styles.shopDetails}>
@@ -188,11 +350,38 @@ export default function StorePage({ shop }: Props) {
             <p>{shop.rating.toFixed(1)} ★ ({shop.reviews.toLocaleString()})</p>
           </div>
           <div className={styles.actions}>
-            <button><i className="icon-bell"/><FiBell/></button>
-            <button><i className="icon-search"/><FiSearch/></button>
+            <button><FiBell/></button>
+            <button><FiSearch/></button>
             <button onClick={() => setShowModal(true)}><FiMoreHorizontal/></button>
           </div>
         </div>
+      </div>
+
+      <div className={styles.productListings}>
+        {shop.recentlyViewed && shop.recentlyViewed.length > 0 && (
+          <RecentlyViewedListing products={shop.recentlyViewed} textColor={textColor} title="Recently viewed" />
+        )}
+
+        {shop.collections && shop.collections.length > 0 && (
+          <CollectionsListing collections={shop.collections} textColor={textColor} />
+        )}
+
+        {shop.videos && shop.videos.length > 0 && (
+          <VideoCarousel videos={shop.videos} textColor={textColor} />
+        )}
+        
+        {shop.products && shop.products.length > 0 && (
+          <ProductListing products={shop.products} textColor={textColor} title={`Shop ${shop.name}`} />
+        )}
+        
+        {shop.categories && shop.categories.map((category) => (
+          <ProductListing 
+            key={category.title} 
+            products={category.products} 
+            title={category.title} 
+            textColor={textColor}
+          />
+        ))}
       </div>
 
       <ShopOptionsModal open={showModal} onClose={() => setShowModal(false)} shop={shop}/>

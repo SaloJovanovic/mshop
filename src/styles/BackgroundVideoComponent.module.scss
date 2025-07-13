@@ -174,7 +174,7 @@
     backdrop-filter: blur(6px);
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 
-    .specialOffer {
+    .speciaffer {
       background: #5025e7;
       color: white;
       font-weight: 600;
@@ -188,4 +188,16 @@
       font-size: 0.8rem;
     }
   }
+}
+
+.fullscreenOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  overflow-y: auto; // Changed from scroll to auto
+  -webkit-overflow-scrolling: touch; // For smooth scrolling on iOS
 }

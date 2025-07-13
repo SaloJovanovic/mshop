@@ -6,3 +6,12 @@ body {
   color: #000;
   overflow-x: hidden;
 }
+
+.slick-dots {
+  li {
+    margin: 0 0 2.5rem 0 !important;
+    button {
+      padding: 0 !important;
+    }
+  }
+}
