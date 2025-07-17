@@ -47,7 +47,8 @@ export default function ShopAdvancedOptionsModal({ open, onClose, shop, followSt
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).classList.contains(styles.backdrop)) {
-      setAnimateIn(false);
+      setAnimateIn(false); // pokreće zatvaranje
+    }
   };
 
   // Extract dominant color from logo image and calculate contrast color

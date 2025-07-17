@@ -325,7 +325,7 @@ export default function StorePage({ shop }: Props) {
                     animate={{opacity: 1}}
                     exit={{opacity: 0}}
                     transition={{duration: 0.3}}
-                    onAnimationComplete={() => setTimeout(() => setFollowStage('bellCrossed'), 300)}
+                    onAnimationComplete={() => setTimeout(() => setFollowStage('bellCrossed'), 300)} // Sekvencijalno
                   >
                     <motion.svg
                       width="24"
