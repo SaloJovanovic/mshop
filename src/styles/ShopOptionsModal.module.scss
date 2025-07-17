@@ -43,7 +43,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: .5rem;
 
     .logo {
       background: #f4f4f4;
@@ -74,11 +74,15 @@
     }
   }
 
+  .slogan {
+    padding-bottom: 0.75rem;
+  }
+
   .option, .optionDanger {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 0;
+    padding: 1rem 0;
     font-size: 1rem;
     cursor: pointer;
     border-top: 1px solid #eee;

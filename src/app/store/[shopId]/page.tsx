@@ -1,7 +1,7 @@
 import React from "react";
 import StorePageComponent from "@/components/StorePage";
-import { PageWrapper } from "@/components/page-wrapper";
-import BottomNavigation from "@/components/BottomNavigation";
+
+
 
 export default async function RootLayout({
                                            params
@@ -18,8 +18,6 @@ export default async function RootLayout({
   if (!shop) return <div>Shop not found</div>;
 
   return (
-    <PageWrapper>
-       <StorePageComponent shop={shop} />
-    </PageWrapper>
+     <StorePageComponent shop={shop} />
   );
 }

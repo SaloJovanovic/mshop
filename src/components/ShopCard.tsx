@@ -21,7 +21,6 @@ export default function ShopCard({ shop }: { shop: Shop }) {
   const [textColor, setTextColor] = useState<string>('#000');
 
   function getContrastColor(r: number, g: number, b: number) {
-    // YIQ formula (perceptual brightness)
     const yiq = (r * 299 + g * 587 + b * 114) / 1000;
     return yiq >= 128 ? '#000' : '#fff';
   }

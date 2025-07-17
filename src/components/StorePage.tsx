@@ -1,13 +1,14 @@
 'use client';
 import styles from '@/styles/StorePage.module.scss';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
-import ShopOptionsModal from '@/components/ShopOptionsModal';
 import ColorThief from 'color-thief-browser';
 import CollectionsListing from '@/components/CollectionsListing';
 import { FiBell, FiSearch } from "react-icons/fi";
 import { motion, AnimatePresence } from 'framer-motion';
 import VideoCarousel from './VideoCarousel';
+import ShopAdvancedOptionsModal from "@/components/ShopAdvancedOptionsModal";
+import NotificationModal from "@/components/NotificationModal";
 
 interface Product {
   image: string;
@@ -48,6 +49,10 @@ interface ExtendedShop {
   collections?: Collection[];
   videos?: Video[];
   backgroundColor?: string;
+  description?: string;
+  refundPolicy?: string;
+  shippingPolicy?: string;
+  websiteLink?: string;
 }
 
 interface Props {
@@ -113,6 +118,10 @@ export default function StorePage({ shop }: Props) {
   const [showSpecial, setShowSpecial] = useState(false);
   const [scroll, setScroll] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  // const[isFollowing, setIsFollowing] = useState(false);
+  const [followStage, setFollowStage] = useState<'follow' | 'check' | 'bellCrossed' | 'bell'>('follow');
+  const [notifModal, setNotifModal] = useState(false);
 
   const getContrastColor = useCallback((r: number, g: number, b: number) => {
     const yiq = (r * 299 + g * 587 + b * 114) / 1000;
@@ -211,7 +220,7 @@ export default function StorePage({ shop }: Props) {
     setTimeout(() => {
       setShowSpecial(true);
     }, 1300);
-    
+
     const color = getComputedStyle(document.documentElement).getPropertyValue('--theme-color').trim();
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
@@ -224,13 +233,13 @@ export default function StorePage({ shop }: Props) {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       setScrollPosition(scrollY);
-      
+
       const mediaHeight = wrapperRef.current?.querySelector(`.${styles.media}`)?.clientHeight || 0;
       const shopDetailsHeight = wrapperRef.current?.querySelector(`.${styles.shopDetails}`)?.clientHeight || 0;
       const threshold = mediaHeight + shopDetailsHeight - 100;
-    
+
       setScroll(scrollY > threshold);
-      
+
       if (scrollY > threshold) {
         setTextColor('black');
       } else {
@@ -277,7 +286,7 @@ export default function StorePage({ shop }: Props) {
     >
       <AnimatePresence>
         {scroll && (
-          <motion.div 
+          <motion.div
             className={styles.stickyHeader}
             initial={{ opacity: 1, y: -100 }}
             animate={{ opacity: 1, y: 0 }}
@@ -285,16 +294,105 @@ export default function StorePage({ shop }: Props) {
             transition={{ duration: 0.3 }}
           >
             <div className={styles.logoDiv}>
-              <img 
-                src={shop.logo} 
-                alt="logo" 
+              <img
+                src={shop.logo}
+                alt="logo"
                 className={styles.stickyLogo}
                 style={{ width: `${logoSize}px`, backgroundColor: logoBgColor }}
               />
               {shop.name}
             </div>
             <div className={styles.stickyActions}>
-              <button><FiBell/></button>
+              <AnimatePresence mode="wait">
+                {followStage === 'follow' && (
+                  <motion.button
+                    key="follow"
+                    initial={{opacity: 0, width: 40}}
+                    animate={{opacity: 1, width: 70}}
+                    exit={{opacity: 0, width: 40}}
+                    transition={{duration: 0.2}}
+                    className={styles.followBtn}
+                    onClick={() => setFollowStage('check')}
+                  >
+                    Follow
+                  </motion.button>
+                )}
+
+                {followStage === 'check' && (
+                  <motion.button
+                    key="check"
+                    initial={{opacity: 0}}
+                    animate={{opacity: 1}}
+                    exit={{opacity: 0}}
+                    transition={{duration: 0.3}}
+                    onAnimationComplete={() => setTimeout(() => setFollowStage('bellCrossed'), 300)}
+                  >
+                    <motion.svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#000"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <motion.path
+                        d="M20 6L9 17L4 12"
+                        variants={{
+                          hidden: {pathLength: 0, opacity: 0},
+                          visible: {
+                            pathLength: 1,
+                            opacity: 1,
+                            transition: {duration: 0.3, ease: "easeInOut"},
+                          },
+                        }}
+                      />
+                    </motion.svg>
+                  </motion.button>
+                )}
+
+                {followStage === 'bellCrossed' && (
+                  <motion.button
+                    key="bellCrossed"
+                    initial={{opacity: 0}}
+                    animate={{opacity: 1}}
+                    exit={{opacity: 0}}
+                    transition={{duration: 0.2}}
+                    onClick={() => setNotifModal(true)}
+                  >
+                    <div className={styles.bellWrapper}>
+                      <FiBell size={20}/>
+                      <motion.div
+                        style={{backgroundColor: '#000'}}
+                        className={styles.crossLine}
+                        initial={{scaleX: 0, rotateZ: -45}}
+                        animate={{scaleX: 1, rotateZ: -45}}
+                        exit={{scaleX: 0, rotateZ: -45}}
+                        transition={{duration: 0.3}}
+                      />
+                    </div>
+                  </motion.button>
+                )}
+
+                {followStage === 'bell' && (
+                  <motion.button
+                    key="bell"
+                    initial={{opacity: 0}}
+                    animate={{opacity: 1}}
+                    exit={{opacity: 0}}
+                    transition={{duration: 0.2}}
+                    onClick={() => setNotifModal(true)}
+                  >
+                    <div className={styles.bellWrapper}>
+                      <FiBell size={20}/>
+                    </div>
+                  </motion.button>
+                )}
+              </AnimatePresence>
+
               <button><FiSearch/></button>
               <button onClick={() => setShowModal(true)}><FiMoreHorizontal/></button>
             </div>
@@ -329,10 +427,10 @@ export default function StorePage({ shop }: Props) {
       )}
 
       <div className={styles.overlay}>
-        <motion.img 
-          src={shop.logo} 
+        <motion.img
+          src={shop.logo}
           alt="logo"
-          style={{ 
+          style={{
             width: `${Math.max(20, 50 - scrollPosition * 0.1)}%`,
             transition: 'width 0.3s ease'
           }}
@@ -350,41 +448,131 @@ export default function StorePage({ shop }: Props) {
             <p>{shop.rating.toFixed(1)} ★ ({shop.reviews.toLocaleString()})</p>
           </div>
           <div className={styles.actions}>
-            <button><FiBell/></button>
+            <AnimatePresence mode="wait">
+              {followStage === 'follow' && (
+                <motion.button
+                  key="follow"
+                  initial={{opacity: 0, width: 40}}
+                  animate={{opacity: 1, width: 70}}
+                  exit={{opacity: 0, width: 40}}
+                  transition={{duration: 0.2}}
+                  className={styles.followBtn}
+                  onClick={() => setFollowStage('check')}
+                >
+                  Follow
+                </motion.button>
+              )}
+
+              {followStage === 'check' && (
+                <motion.button
+                  key="check"
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  exit={{opacity: 0}}
+                  transition={{duration: 0.3}}
+                  onAnimationComplete={() => setTimeout(() => setFollowStage('bellCrossed'), 300)} // Sekvencijalno
+                >
+                  <motion.svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#fff"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <motion.path
+                      d="M20 6L9 17L4 12"
+                      variants={{
+                        hidden: {pathLength: 0, opacity: 0},
+                        visible: {
+                          pathLength: 1,
+                          opacity: 1,
+                          transition: {duration: 0.3, ease: "easeInOut"},
+                        },
+                      }}
+                    />
+                  </motion.svg>
+                </motion.button>
+              )}
+
+              {followStage === 'bellCrossed' && (
+                <motion.button
+                  key="bellCrossed"
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  exit={{opacity: 0}}
+                  transition={{duration: 0.2}}
+                  onClick={() => setNotifModal(true)}
+                >
+                  <div className={styles.bellWrapper}>
+                  <FiBell size={20}/>
+                    <motion.div
+                      className={styles.crossLine}
+                      initial={{scaleX: 0, rotateZ: -45}}
+                      animate={{scaleX: 1, rotateZ: -45}}
+                      exit={{scaleX: 0, rotateZ: -45}}
+                      transition={{duration: 0.3}}
+                    />
+                  </div>
+                </motion.button>
+              )}
+
+              {followStage === 'bell' && (
+                <motion.button
+                  key="bell"
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  exit={{opacity: 0}}
+                  transition={{duration: 0.2}}
+                  onClick={() => setNotifModal(true)}
+                >
+                  <div className={styles.bellWrapper}>
+                    <FiBell size={20}/>
+                  </div>
+                </motion.button>
+              )}
+            </AnimatePresence>
+
             <button><FiSearch/></button>
             <button onClick={() => setShowModal(true)}><FiMoreHorizontal/></button>
           </div>
+
         </div>
       </div>
 
       <div className={styles.productListings}>
         {shop.recentlyViewed && shop.recentlyViewed.length > 0 && (
-          <RecentlyViewedListing products={shop.recentlyViewed} textColor={textColor} title="Recently viewed" />
+          <RecentlyViewedListing products={shop.recentlyViewed} textColor={textColor} title="Recently viewed"/>
         )}
 
         {shop.collections && shop.collections.length > 0 && (
-          <CollectionsListing collections={shop.collections} textColor={textColor} />
+          <CollectionsListing collections={shop.collections} textColor={textColor}/>
         )}
 
         {shop.videos && shop.videos.length > 0 && (
-          <VideoCarousel videos={shop.videos} textColor={textColor} />
+          <VideoCarousel videos={shop.videos} textColor={textColor}/>
         )}
-        
+
         {shop.products && shop.products.length > 0 && (
-          <ProductListing products={shop.products} textColor={textColor} title={`Shop ${shop.name}`} />
+          <ProductListing products={shop.products} textColor={textColor} title={`Shop ${shop.name}`}/>
         )}
-        
+
         {shop.categories && shop.categories.map((category) => (
-          <ProductListing 
-            key={category.title} 
-            products={category.products} 
-            title={category.title} 
+          <ProductListing
+            key={category.title}
+            products={category.products}
+            title={category.title}
             textColor={textColor}
           />
         ))}
       </div>
 
-      <ShopOptionsModal open={showModal} onClose={() => setShowModal(false)} shop={shop}/>
+      <ShopAdvancedOptionsModal open={showModal} onClose={() => setShowModal(false)} shop={shop}/>
+      <NotificationModal open={notifModal} onClose={() => setNotifModal(false)} shop={shop} followStage={followStage} setFollowStage={setFollowStage}/>
     </div>
   );
 }

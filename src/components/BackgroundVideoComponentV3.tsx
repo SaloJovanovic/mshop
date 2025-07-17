@@ -1,4 +1,3 @@
-// components/BackgroundVideoComponentV3.tsx
 'use client';
 
 import styles from '../styles/BackgroundVideoComponent.module.scss';
@@ -7,7 +6,7 @@ import {FiHeart, FiMoreHorizontal} from 'react-icons/fi';
 import ShopOptionsModal from './ShopOptionsModal';
 import React, { useState } from 'react';
 import {FaArrowRight} from "react-icons/fa6";
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface Product {
   id: number;
@@ -34,8 +33,6 @@ interface Props {
 export default function BackgroundVideoComponentV3({ shop }: Props) {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   return (
     <div className={styles.wrapper}>
@@ -56,11 +53,10 @@ export default function BackgroundVideoComponentV3({ shop }: Props) {
           <div className={styles1.grid}>
             {shop.products.slice(0, 4).map(product => (
               <div key={product.id} onClick={() => {
-                console.log("Kliknuo si")
-                alert("alo")
+                router.push(`/product/${product.id}`);
               }} className={styles1.item}>
                 <img src={product.image} alt="item" className={styles1.itemImage}/>
-                <div className={styles.price}>{product.price}</div>
+                <div className={styles1.price}>{product.price}</div>
                 <div className={styles1.heart}>
                   <FiHeart/>
                 </div>

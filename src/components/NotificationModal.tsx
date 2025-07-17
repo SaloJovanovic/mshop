@@ -3,6 +3,8 @@
 import styles from '../styles/ShopOptionsModal.module.scss';
 import { useEffect, useState } from 'react';
 import { FiX, FiHome, FiPlus, FiThumbsDown, FiAlertCircle } from 'react-icons/fi';
+import {SlUserUnfollow} from "react-icons/sl";
+import {Bell, BellMinus} from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -12,10 +14,13 @@ interface Props {
     logo: string;
     rating: number;
     reviews: number;
+    slogan: string;
   };
+  followStage: string;
+  setFollowStage: (value: 'follow' | 'check' | 'bell' | 'bellCrossed') => void;
 }
 
-export default function ShopOptionsModal({ open, onClose, shop }: Props) {
+export default function ShopAdvancedOptionsModal({ open, onClose, shop, followStage, setFollowStage }: Props) {
   const [shouldRender, setShouldRender] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
 
@@ -43,9 +48,8 @@ export default function ShopOptionsModal({ open, onClose, shop }: Props) {
   const handleBackdropClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).classList.contains(styles.backdrop)) {
       setAnimateIn(false);
-    }
   };
-  
+
   // Extract dominant color from logo image and calculate contrast color
   const [logoBgColor, setLogoBgColor] = useState<string>('white');
   useEffect(() => {
@@ -91,10 +95,22 @@ export default function ShopOptionsModal({ open, onClose, shop }: Props) {
           <button onClick={() => setAnimateIn(false)} className={styles.closeBtn}><FiX /></button>
         </div>
 
-        <div className={styles.option}><FiHome /> Visit shop</div>
-        <div className={styles.option}><FiPlus /> Follow</div>
-        <div className={styles.option}><FiThumbsDown /> Not interested</div>
-        {/*<div className={styles.optionDanger}><FiAlertCircle /> Report shop</div>*/}
+        <div className={styles.slogan}>{shop.slogan}</div>
+        {followStage === "bellCrossed" ?
+          <div onClick={() => {
+            setAnimateIn(false);
+            setFollowStage('bell');
+          }} className={styles.option}><Bell/> Turn on notifications</div>
+          :
+          <div onClick={() => {
+            setAnimateIn(false);
+            setFollowStage('bellCrossed');
+          }} className={styles.option}><BellMinus/> Turn off notifications</div>
+        }
+        <div className={styles.optionDanger} onClick={() => {
+          setAnimateIn(false);
+          setFollowStage('follow');
+        }}><SlUserUnfollow /> Unfollow</div>
       </div>
     </div>
   );

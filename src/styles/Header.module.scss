@@ -9,14 +9,13 @@
   z-index: 10;
   background: transparent;
 
-  // Ključni deo – dekoracija ide u pseudo-element
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 5rem; // ili više ako treba da seže dalje
+    height: 5rem;
     padding-top: 30px;
     background: linear-gradient(
         to bottom,
@@ -39,7 +38,7 @@
         rgba(255, 255, 255, 0) 100%
     );
 
-    pointer-events: none; // <<< Sprečava klik kroz background
+    pointer-events: none;
     z-index: -1;
   }
 

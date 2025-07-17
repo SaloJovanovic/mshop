@@ -1,6 +1,8 @@
 import { useRef, useState, useLayoutEffect, useEffect } from 'react';
 import styles from '@/styles/VideoFeedModal.module.scss';
-import { FiX, FiShoppingCart, FiMoreHorizontal, FiVolume2, FiVolumeX } from 'react-icons/fi';
+import { FiX, FiShoppingCart, FiVolume2, FiVolumeX } from 'react-icons/fi';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { motion } from 'framer-motion';
 
 interface Product {
   id: string;
@@ -32,6 +34,8 @@ export default function VideoFeedModal({ open, videos, initialIndex, onClose }: 
   const [muted, setMuted] = useState(true);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const [favorited, setFavorited] = useState(false);
 
   // Scroll to the correct video immediately when modal opens
   useLayoutEffect(() => {
@@ -71,6 +75,25 @@ export default function VideoFeedModal({ open, videos, initialIndex, onClose }: 
     }
   };
 
+  const [logoBgColor, setLogoBgColor] = useState<string>('white');
+  useEffect(() => {
+    if (!videos[activeIndex].shopLogo) return;
+    const img = document.createElement('img');
+    img.crossOrigin = 'anonymous';
+    img.src = videos[activeIndex].shopLogo;
+    img.onload = () => {
+      try {
+        // @ts-ignore
+        const colorThief = new (window.ColorThief || require('color-thief-browser'))();
+        const color = colorThief.getColor(img);
+        const yiq = (color[0] * 299 + color[1] * 587 + color[2] * 114) / 1000;
+        setLogoBgColor(yiq >= 178 ? '#000' : '#fff');
+      } catch {
+        setLogoBgColor('white');
+      }
+    };
+  }, [videos[activeIndex].shopLogo]);
+
   if (!open) return null;
 
   return (
@@ -88,36 +111,51 @@ export default function VideoFeedModal({ open, videos, initialIndex, onClose }: 
             />
 
             <div className={styles.overlay}>
-              <div className={styles.topLeft}>
-                <p className={styles.shopName}>{video.shopName}</p>
-                <button className={styles.followBtn}>
-                  {video.isFollowing ? 'Following' : 'Follow'}
-                </button>
-              </div>
 
-              <div className={styles.topRight}>
-                <img src={video.shopLogo} className={styles.shopLogo} alt="logo" />
+              <div className={styles.bottomRight}>
+                <img src={video.shopLogo} className={styles.shopLogo} alt="logo" style={{backgroundColor: logoBgColor}} />
                 <button onClick={() => setMuted(!muted)} className={styles.soundBtn}>
                   {muted ? <FiVolumeX /> : <FiVolume2 />}
                 </button>
               </div>
 
-              <div className={styles.productBox}>
-                <img src={video.product.image} alt={video.product.name} />
-                <div className={styles.productInfo}>
-                  <p className={styles.productName}>{video.product.name}</p>
-                  <p className={styles.productMeta}>
-                    {video.product.rating.toFixed(1)} ★ ({video.product.reviews}) <br />
-                    {video.product.price}
-                  </p>
+              <div className={styles.left}>
+                <div className={styles.nameAndFollow}>
+                  <p className={styles.shopName}>{video.shopName}</p>
+                  <button className={styles.followBtn}>
+                    {video.isFollowing ? 'Following' : 'Follow'}
+                  </button>
                 </div>
-                <button className={styles.favBtn}>♡</button>
+                <div className={styles.productBox}>
+                  <img src={video.product.image} alt={video.product.name}/>
+                  <div className={styles.productInfo}>
+                    <p className={styles.productName}>{video.product.name}</p>
+                    <p className={styles.productMeta}>
+                      {video.product.rating.toFixed(1)} ★ ({video.product.reviews}) <br/>
+                      {video.product.price}
+                    </p>
+                  </div>
+                  <motion.button
+                    className={styles.favBtn}
+                    onClick={() => setFavorited(!favorited)}
+                    whileTap={{scale: 0.8}}
+                    animate={{
+                      scale: [1, 1.4, 1],
+                      color: favorited ? "#e0245e" : "#555",
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    {favorited ? <AiFillHeart/> : <AiOutlineHeart/>}
+                  </motion.button>
+                </div>
               </div>
 
               <div className={styles.bottomBar}>
-                <button onClick={onClose}><FiX /></button>
-                <button><FiShoppingCart /></button>
-                <button><FiMoreHorizontal /></button>
+                <button onClick={onClose}><FiX/></button>
+                <button><FiShoppingCart/></button>
               </div>
             </div>
           </div>

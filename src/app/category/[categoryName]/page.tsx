@@ -21,8 +21,8 @@ export default function HomePage() {
 
 
   return (
-    <PageWrapper>
+    // <PageWrapper>
       <CategoryPage categories={SUBCATEGORIES}/>
-    </PageWrapper>
+    // </PageWrapper>
   );
 }

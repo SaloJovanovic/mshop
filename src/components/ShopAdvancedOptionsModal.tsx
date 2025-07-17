@@ -12,10 +12,11 @@ interface Props {
     logo: string;
     rating: number;
     reviews: number;
+    slogan: string;
   };
 }
 
-export default function ShopOptionsModal({ open, onClose, shop }: Props) {
+export default function ShopAdvancedOptionsModal({ open, onClose, shop }: Props) {
   const [shouldRender, setShouldRender] = useState(false);
   const [animateIn, setAnimateIn] = useState(false);
 
@@ -42,10 +43,10 @@ export default function ShopOptionsModal({ open, onClose, shop }: Props) {
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).classList.contains(styles.backdrop)) {
-      setAnimateIn(false);
+      setAnimateIn(false); // pokreće zatvaranje
     }
   };
-  
+
   // Extract dominant color from logo image and calculate contrast color
   const [logoBgColor, setLogoBgColor] = useState<string>('white');
   useEffect(() => {
@@ -91,10 +92,13 @@ export default function ShopOptionsModal({ open, onClose, shop }: Props) {
           <button onClick={() => setAnimateIn(false)} className={styles.closeBtn}><FiX /></button>
         </div>
 
-        <div className={styles.option}><FiHome /> Visit shop</div>
-        <div className={styles.option}><FiPlus /> Follow</div>
-        <div className={styles.option}><FiThumbsDown /> Not interested</div>
-        {/*<div className={styles.optionDanger}><FiAlertCircle /> Report shop</div>*/}
+        <div className={styles.slogan}>{shop.slogan}</div>
+        <div className={styles.option}><FiHome /> Contact {shop.name}</div>
+        <div className={styles.option}><FiPlus /> Visit online store</div>
+        <div className={styles.option}><FiThumbsDown /> Share</div>
+        <div className={styles.option}><FiThumbsDown /> Refund policy</div>
+        <div className={styles.option}><FiThumbsDown /> Privacy policy</div>
+        <div className={styles.option}><FiThumbsDown /> Terms and conditions</div>
       </div>
     </div>
   );

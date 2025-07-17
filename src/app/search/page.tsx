@@ -4,9 +4,9 @@ import SearchPage from "@/components/SearchPage";
 
 export default function HomePage() {
   return (
-    <PageWrapper>
+    // <PageWrapper>
       <SearchPage/>
 
-    </PageWrapper>
+    // </PageWrapper>
   );
 }

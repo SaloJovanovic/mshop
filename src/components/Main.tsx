@@ -1,6 +1,5 @@
 'use client';
 
-import BottomNavigation from "@/components/BottomNavigation";
 import ShopCarousel from "@/components/ShopCarousel";
 import StorePreview from "@/components/StorePreview";
 import BackgroundVideoComponent from "@/components/BackgroundVideoComponent";
@@ -10,10 +9,11 @@ import shops from '../data/shops.json';
 import Header from "@/components/Header";
 import { PageWrapper } from "@/components/page-wrapper";
 
+
 export default function Main() {
 
   return (
-    <PageWrapper>
+    // <PageWrapper>
       <main style={{padding: '3.2rem 1.2rem 1.2rem 1.2rem'}}>
         <Header />
         <h2 style={{padding: '0 1rem 1rem 1rem'}}>Recommended Shops</h2>
@@ -27,8 +27,7 @@ export default function Main() {
         <br/>
         <br/>
         <br/>
-        {/* <BottomNavigation/> */}
       </main>
-    </PageWrapper>
+    // </PageWrapper>
   );
 }

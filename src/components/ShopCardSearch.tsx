@@ -1,4 +1,3 @@
-// components/ShopCardSearch.tsx
 import React, {useEffect, useState} from 'react';
 import Slider from 'react-slick';
 import styles from '@/styles/ShopCardSearch.module.scss';

@@ -52,6 +52,7 @@
   {
     "id": 5,
     "name": "Nike",
+    "slogan": "Just do it.",
     "backgroundImage": "/images/shops/shop5.avif",
     "logo": "/images/logos/logo5.png",
     "rating": 4.8,

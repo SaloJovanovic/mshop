@@ -13,14 +13,14 @@ const viralSearches = [
   "Wireless LED lamps",
 ];
 
-const changeInterval = 3000; // 3 sekunde
+const changeInterval = 3000;
 
 const ViralSearchBar = () => {
   const [index, setIndex] = useState(0);
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    if (input) return; // Pauziraj ako korisnik kuca
+    if (input) return; // Pause if user is typing
 
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % viralSearches.length);

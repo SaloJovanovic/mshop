@@ -81,7 +81,6 @@ export default function VideoCarousel({ videos, textColor }: Props) {
           </div>
         ))}
       </div>
-      <button className={styles.viewAll}>View all</button>
       <VideoFeedModal open={showFeed} initialIndex={initialIndex} onClose={() => setShowFeed(false)} videos={videos} />
     </div>
   );
